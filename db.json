@@ -1,0 +1,22 @@
+[
+  {
+    "id": "6db1f080-5c00-4d9f-b6c0-d8cca9ac492e",
+    "name": "Sultan",
+    "description": "CRUD"
+  },
+  {
+    "id": "e74f1b99-5f38-4abf-acd2-5dc7c4dcdee8",
+    "name": "Timur",
+    "description": "Very shinee day"
+  },
+  {
+    "id": "0b498ddf-b989-4b54-8d5f-b192f244f3b0",
+    "name": "Suli",
+    "description": "Very rainy day"
+  },
+  {
+    "id": "fa7386d2-98a2-49fe-9d2d-242444281a83",
+    "name": "Jett",
+    "description": "On me"
+  }
+]
