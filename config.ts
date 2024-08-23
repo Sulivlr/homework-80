@@ -10,7 +10,7 @@ const config = {
     host: 'localhost',
     user: 'root',
     password: '1qaz@WSX29',
-    database: 'shop',
+    database: 'inventory',
   }
 };
 

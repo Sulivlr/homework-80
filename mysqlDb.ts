@@ -7,7 +7,7 @@ const mysqlDb = {
   init: async ()  => {
      connection = await mysql.createConnection(config.database);
   },
-  getConnection: async (): Promise<Connection> => {
+  getConnection: () => {
     return connection;
   }
 }

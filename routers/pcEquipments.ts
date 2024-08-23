@@ -1,18 +1,28 @@
 import express from 'express';
-import fileDb from '../fileDb';
-import {Equipment, EquipmentMutation} from '../types';
+import {Item, ItemMutation} from '../types';
+import mysqlDb from '../mysqlDb';
 
 const router = express.Router();
 
 router.get('/', async (req, res) => {
-  const equipment = await fileDb.getEquipment();
-  res.send(equipment);
+  const result = await mysqlDb.getConnection().query(
+    'SELECT * FROM items',
+  );
+  const items = result[0] as Item[];
+  res.send(items);
 });
 
 router.get('/:id', async (req, res) => {
-  const equipments = await fileDb.getEquipment();
-  const equipment = equipments.find((e) => e.id === req.params.id);
-  return res.send(equipment);
+  const id = req.params.id;
+  const result = await mysqlDb.getConnection().query(
+    `SELECT * FROM items WHERE id = ?`,
+    [id]
+  );
+  const item = result[0] as Item[];
+  if (item.length === 0) {
+    return res.status(404).send({error: 'Not Found'});
+  }
+  return res.send(item[0]);
 });
 
 router.post('/', async (req, res) => {
@@ -29,13 +39,14 @@ router.post('/', async (req, res) => {
   });
 
 
-  const equipment: EquipmentMutation = {
-    name: req.body.name,
+  const item: ItemMutation = {
+    category_id: parseInt(req.body.category_id),
+    location_id: parseInt(req.body.location_id),
+    title: req.body.name,
     description: req.body.description,
+    image: req.file ? req.file.filename : null,
   };
 
-  const pcEquipment = await fileDb.addEquipment(equipment);
-  return res.send(pcEquipment);
 });
 
 export default router;
