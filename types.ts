@@ -8,6 +8,17 @@ export interface Item {
   created_at: string;
 }
 
+export interface Category {
+  id: number;
+  title: string;
+  description: string;
+}
+
+export interface CategoryMutation {
+  title: string;
+  description: string;
+}
+
 export interface ItemMutation {
   category_id: number;
   location_id: number;
