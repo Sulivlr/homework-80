@@ -43,7 +43,6 @@ router.post('/', imagesUpload.single('image'), async (req, res) => {
   );
 
   const resultHeader = insertResult[0] as ResultSetHeader;
-  console.log(resultHeader.insertId)
 
   const getNewResult = await mysqlDb.getConnection().query(
     'SELECT * FROM items WHERE id = ?',
