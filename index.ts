@@ -10,7 +10,7 @@ const port = 8000;
 
 app.use(cors());
 app.use(express.json());
-app.use('/equipments', pcEquipments);
+app.use('/items', pcEquipments);
 
 const run = async () => {
   await mysqlDb.init();

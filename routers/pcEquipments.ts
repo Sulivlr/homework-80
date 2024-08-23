@@ -1,6 +1,8 @@
 import express from 'express';
 import {Item, ItemMutation} from '../types';
 import mysqlDb from '../mysqlDb';
+import {imagesUpload} from '../multer';
+import {ResultSetHeader} from 'mysql2';
 
 const router = express.Router();
 
@@ -25,28 +27,31 @@ router.get('/:id', async (req, res) => {
   return res.send(item[0]);
 });
 
-router.post('/', async (req, res) => {
-  if (!req.body.name || !req.body.description) {
-    return res.status(400).send({error: 'Please enter a name or description'});
-  }
-
-  router.delete('/:id', async (req, res) => {
-
-  });
-
-  router.put('/', async (req, res) => {
-
-  });
-
+router.post('/', imagesUpload.single('image'), async (req, res) => {
 
   const item: ItemMutation = {
     category_id: parseInt(req.body.category_id),
     location_id: parseInt(req.body.location_id),
-    title: req.body.name,
+    title: req.body.title,
     description: req.body.description,
     image: req.file ? req.file.filename : null,
   };
 
+  const insertResult = await mysqlDb.getConnection().query(
+    'INSERT INTO items (category_id, location_id, title, description, image) VALUES (?, ?, ?, ?, ?)',
+    [item.category_id, item.location_id, item.title, item.description, item.image],
+  );
+
+  const resultHeader = insertResult[0] as ResultSetHeader;
+  console.log(resultHeader.insertId)
+
+  const getNewResult = await mysqlDb.getConnection().query(
+    'SELECT * FROM items WHERE id = ?',
+    [resultHeader.insertId]
+  );
+
+  const items = getNewResult[0] as Item[];
+  return res.send(items[0]);
 });
 
 export default router;
