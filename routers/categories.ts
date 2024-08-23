@@ -32,11 +32,16 @@ categoriesRouter.get("/:id", async (req, res,next) => {
 
 
 categoriesRouter.post("/", async (req, res, next) => {
+  try {
+    const { title, description } = req.body;
 
+    if (!title) {
+      return res.status(400).send({ error: 'Title is required' });
+    }
 
     const category: CategoryMutation = {
-      title: req.body.title,
-      description: req.body.description,
+      title,
+      description,
     };
 
     const insertResult = await mysqlDb.getConnection().query(
@@ -53,8 +58,9 @@ categoriesRouter.post("/", async (req, res, next) => {
 
     const categories = getNewResult[0] as Category[];
     return res.send(categories[0]);
-
-
+  } catch (e) {
+    next(e);
+  }
 });
 
 export default categoriesRouter;
